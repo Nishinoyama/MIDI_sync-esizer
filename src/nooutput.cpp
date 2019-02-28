@@ -79,10 +79,10 @@ public :
     }
 
     void ShowAllProperties(){
-        printf( "ChunkType    : %s\n", ChunkType );
-        printf( "Format       : %u\n", Format );
-        printf( "NumberTracks : %u\n", NumberTracks );
-        printf( "Division     : %u\n", Division );
+        // printf( "ChunkType    : %s\n", ChunkType );
+        // printf( "Format       : %u\n", Format );
+        // printf( "NumberTracks : %u\n", NumberTracks );
+        // printf( "Division     : %u\n", Division );
     }
 
     void ReadHeader( fstream& ofs ){
@@ -108,10 +108,10 @@ public :
                 ofs.read( (char*)&s, 1 );
                 DataIndex++;
                 data3 = s ;
-                printf( "[note off]\n" );
-                printf( "ch  :  %d\n", data1);
-                printf( "nt  :  %2X\n", data2);
-                printf( "vl  :  %d\n", data3 );
+                // printf( "[note off]\n" );
+                // printf( "ch  :  %d\n", data1);
+                // printf( "nt  :  %2X\n", data2);
+                // printf( "vl  :  %d\n", data3 );
                 midiOutShortMsg(hmo, data3<<16 | data2<<8 | event );
                 break;
 
@@ -120,11 +120,11 @@ public :
                 ofs.read( (char*)&s, 1 );
                 DataIndex++;
                 data3 = s ;
-                printf( "[note on]\n" );
-                printf( "ch  :  %d\n", data1);
-                printf( "nt  :  %2X\n", data2);
-                printf( "vl  :  %d\n", data3 );
-                printf( "%X\n", data3<<16 | data2<<8 | event );
+                // printf( "[note on]\n" );
+                // printf( "ch  :  %d\n", data1);
+                // printf( "nt  :  %2X\n", data2);
+                // printf( "vl  :  %d\n", data3 );
+                // printf( "%X\n", data3<<16 | data2<<8 | event );
                 midiOutShortMsg(hmo, data3<<16 | data2<<8 | event );
                 break;
             
@@ -134,15 +134,15 @@ public :
                 ofs.read( (char*)&s, 1 );
                 DataIndex++;
                 data3 = s ;
-                printf( "[Polyphonic Key Pressure]\n" );
-                printf( "ch  :  %d\n", data1);
-                printf( "nt  :  %2X\n", data2);
-                printf( "vl  :  %d\n", data3 );
+                // printf( "[Polyphonic Key Pressure]\n" );
+                // printf( "ch  :  %d\n", data1);
+                // printf( "nt  :  %2X\n", data2);
+                // printf( "vl  :  %d\n", data3 );
                 midiOutShortMsg(hmo, data3<<16 | data2<<8 | event );
                 break;
 
             case 0xB0: // コントロールチェンジ
-                printf( "[Controll Change]\n");
+                // printf( "[Controll Change]\n");
                 ofs.read( (char*) &s, 1 );
                 DataIndex++;
                 data3 = s;
@@ -150,12 +150,12 @@ public :
                 break;
 
             case 0xC0: // プログラムチェンジ
-                printf( "[Program Change]\n");
+                // printf( "[Program Change]\n");
                 midiOutShortMsg(hmo, data2<<8 | event );
                 break;
 
             case 0xE0: // Pitch
-                printf( "[Pitch]\n");
+                // printf( "[Pitch]\n");
                 ofs.read( (char*) &s, 1 );
                 DataIndex++;
                 data3 = s;
@@ -164,31 +164,31 @@ public :
             case 0xF0: // メタイベント・SysExイベント
                 // メタイベント
                 if( event == 0xF7 || event == 0xF0 ){
-                    printf( "[SysExEvent]\n" );
+                    // printf( "[SysExEvent]\n" );
                     ofs.read( b , data2 );
                     DataIndex++;
                 }
                 else
                 if( event == 0xFF ){
-                    printf("subevent :%02X\n", data2 );
+                    // printf("subevent :%02X\n", data2 );
                     data3 = ReadVarialbe( ofs );
                     switch ( data2 ){
 
                         case 0x21:
                             //ポート指定
-                            printf( "Modulation Wheel\n");
+                            // printf( "Modulation Wheel\n");
                             ofs.read( (char*) &s, 1 );
                             DataIndex++;
                             break;
 
                         case 0x2F:
                             // トラック終端
-                            printf("[End of Track]\n");
+                            // printf("[End of Track]\n");
                             break;
 
                         case 0x51:
                             // テンポ
-                            printf("[Set Tempo]\n");
+                            // printf("[Set Tempo]\n");
                             ofs.read( (char*) &s, 1 );
                             DataIndex++;
                             ofs.read( (char*) &s, 1 );
@@ -199,7 +199,7 @@ public :
 
                         case 0x58:
                             // メトロノーム
-                            printf("[Time Signature]\n");
+                            // printf("[Time Signature]\n");
                             ofs.read( (char*) &s, 1 );
                             DataIndex++;
                             ofs.read( (char*) &s, 1 );
@@ -212,7 +212,7 @@ public :
 
                         case 0x59:
                             // 調
-                            printf("[Key Signature]\n");
+                            // printf("[Key Signature]\n");
                             ofs.read( (char*) &s, 1 );
                             DataIndex++;
                             ofs.read( (char*) &s, 1 );
@@ -220,7 +220,7 @@ public :
                             break;
 
                         default:
-                            printf( "[text]\n" );
+                            // printf( "[text]\n" );
                             ofs.read( b, data3 );
                             DataIndex += data3;
                             break;
@@ -237,15 +237,15 @@ int main(){
 
     ofs.open("../MIDIsample/C5_C6_Cmaj_Cmin_on_MuseScore.mid", ios::in | ios::binary );
     if (midiOutOpen(&hmo, MIDI_MAPPER, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR){
-        printf( "\a\a\aerror\n" );
+        // printf( "\a\a\aerror\n" );
         return -1;
     }
 
     if( !ofs ){
-        printf( "\a\a\aerror\n" );
+        // printf( "\a\a\aerror\n" );
         return -1;
     }else{
-        printf( "\aread successfully!\n" );
+        // printf( "\aread successfully!\n" );
     }
 
     int count = 0;
@@ -268,7 +268,7 @@ int main(){
              * デルタタイムを読み取る 
              */
             deltatime = ReadVarialbe( ofs );
-            printf( "deltatime:%X\n", deltatime );
+            // printf( "deltatime:%X\n", deltatime );
             Sleep( deltatime );
 
             /**
@@ -283,16 +283,16 @@ int main(){
                 ofs.read( (char*)&s, 1 );
                 DataIndex++;
             }
-            printf( "event    :%02X\n", event );
+            // printf( "event    :%02X\n", event );
 
             // イベントを走る
             m.EventOccurrer( event, (int)s , ofs );
-            printf("\n");
+            // printf("\n");
 
         }
 
     }
-    printf("\n");
+    // printf("\n");
 
     midiOutClose( hmo );
 
