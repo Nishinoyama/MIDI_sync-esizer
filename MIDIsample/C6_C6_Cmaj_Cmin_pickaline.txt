@@ -23,6 +23,8 @@
 
 # 基本的に、[デルタタイム(1~3byte)]+[イベント(n byte)]
 # そのため、左端は大体 00
+# メタイベントは FF nn ll(可変長) xx xx...(ll byte)
+# と、構成される
 
 # Time Signature 
 #  FF 58 04 nn dd cc bb 
@@ -52,9 +54,9 @@
 # Controll Change
 00 B0 07 64
 
-00 0A 40 
-00 5B 00 
-00 5D 00
+00    0A 40 
+00    5B 00 
+00    5D 00
 
 # ポート指定
 #  FF 21 01 pp 
